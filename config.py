@@ -43,7 +43,7 @@ MAX_NEWS_POSTS_PER_RUN = 2     # Claude picks at most this many per run
 MAX_NEWS_POSTS_PER_DAY = 14
 QUIET_HOURS = (23, 7)          # no news posts from 23:00 to 06:59 IST (calendar alerts still go)
 
-MORNING_BRIEF_AT = "08:30"     # daily "Aaj ka market calendar" post
+MORNING_BRIEF_AT = "09:30"     # daily "Aaj ka market calendar" post
 POLL_SLOTS = ["11:00", "19:30"]  # 2 polls/day: first is a learning quiz, second a market poll
 EVENT_ALERT_MIN_BEFORE = 30    # heads-up this many minutes before a high-impact event
 CALENDAR_CURRENCIES = {"USD"}  # US data moves Gold, NQ and BTC most

@@ -26,6 +26,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 import config
+import promos
 import prompts
 
 IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
@@ -328,6 +329,22 @@ def run_polls(state, now, today_events):
         log(f"posted poll {i}")
 
 
+# ---------------------------------------------------------------- promos
+def run_promos(state, now):
+    if not promos.ENABLED:
+        return
+    for i, (slot, days, versions) in enumerate(promos.SCHEDULE):
+        key = f"{now.date().isoformat()}:promo{i}"
+        slot_t = dt.datetime.combine(now.date(), dt.time.fromisoformat(slot), IST)
+        if now.weekday() not in days or key in state["done"] or not (slot_t <= now < slot_t + dt.timedelta(hours=1)):
+            continue
+        n = state.setdefault("promo_rot", {}).get(str(i), 0)
+        send_text(promos.TEXTS[versions[n % len(versions)]])
+        state["promo_rot"][str(i)] = n + 1
+        state["done"][key] = True
+        log(f"posted promo {i}")
+
+
 # ---------------------------------------------------------------- main
 def main():
     state = load_state()
@@ -339,6 +356,8 @@ def main():
         elif cmd == "calendar":
             state["done"].pop(now.date().isoformat() + ":brief", None)
             run_calendar(state, now.replace(hour=9, minute=0))
+        elif cmd.startswith("promo"):   # promo, promo-full, promo-value, promo-short
+            send_text(promos.TEXTS[cmd.split("-", 1)[1] if "-" in cmd else "full"])
         elif cmd in ("quiz", "poll"):
             i = 0 if cmd == "quiz" else 1
             state["done"].pop(f"{now.date().isoformat()}:poll{i}", None)
@@ -354,6 +373,7 @@ def main():
         except Exception as e:
             log(f"{name} failed: {e}")
     for name, fn in [("polls", lambda: run_polls(state, now, today_events)),
+                     ("promos", lambda: run_promos(state, now)),
                      ("news", lambda: run_news(state, now))]:
         try:
             fn()
