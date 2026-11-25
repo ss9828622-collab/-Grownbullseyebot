@@ -3,8 +3,6 @@
 # ---- News sources (RSS). A broken feed is skipped, it never stops the bot. ----
 FEEDS = {
     # Gold
-    "Kitco": "https://www.kitco.com/rss/KitcoNews.xml",
-    "FXStreet": "https://www.fxstreet.com/rss/news",
     "Google News: Gold": "https://news.google.com/rss/search?q=gold+price+OR+bullion+OR+XAUUSD+when:2h&hl=en-US&gl=US&ceid=US:en",
     # NQ / Nasdaq 100
     "Google News: Nasdaq": "https://news.google.com/rss/search?q=Nasdaq+OR+%22Nasdaq+100%22+OR+%22tech+stocks%22+OR+Nvidia+OR+%22Magnificent+Seven%22+when:2h&hl=en-US&gl=US&ceid=US:en",
