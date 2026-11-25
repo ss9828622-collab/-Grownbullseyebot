@@ -84,9 +84,22 @@ def claude(prompt, max_tokens=1500):
             "generationConfig": {"maxOutputTokens": 4096, "temperature": 0.7,
                                  "responseMimeType": "application/json"},
         }).encode()
-        raw = http(f"https://generativelanguage.googleapis.com/v1beta/models/{config.GEMINI_MODEL}:generateContent",
-                   body, {"x-goog-api-key": os.environ["GEMINI_API_KEY"],
-                          "content-type": "application/json"}, timeout=90)
+        raw, last_err = None, None
+        for attempt in range(2):            # free tier is sometimes busy: retry + fall back to other models
+            for model in config.GEMINI_MODELS:
+                try:
+                    raw = http(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                               body, {"x-goog-api-key": os.environ["GEMINI_API_KEY"],
+                                      "content-type": "application/json"}, timeout=60)
+                    break
+                except Exception as e:
+                    last_err = e
+                    log(f"gemini {model} failed: {e}")
+            if raw:
+                break
+            time.sleep(10)
+        if not raw:
+            raise RuntimeError(f"all Gemini models failed: {last_err}")
         parts = json.loads(raw)["candidates"][0]["content"]["parts"]
         text = "".join(p.get("text", "") for p in parts if not p.get("thought"))
         m = re.search(r"(\[.*\]|\{.*\})", text, re.S)
