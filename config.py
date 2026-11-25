@@ -22,7 +22,7 @@ KEYWORDS = [
 
 # ---- AI writer ----
 # Free: set GEMINI_API_KEY (from aistudio.google.com). Optional paid: ANTHROPIC_API_KEY uses Claude.
-GEMINI_MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest", "gemini-2.5-flash"]  # tried in order
+GEMINI_MODELS = ["gemini-flash-lite-latest", "gemini-flash-latest", "gemini-2.5-flash"]  # tried in order
 MODEL = "claude-sonnet-5-5"
 
 # ---- Pacing (IST) ----
