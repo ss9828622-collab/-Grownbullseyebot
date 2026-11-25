@@ -1,26 +1,29 @@
 name: Telegram market bot
 
+# How it stays on: a "loop" run checks every 10 minutes for ~5h40m, then starts the next loop run
+# itself. The cron below is only a backup that restarts the loop if the chain ever stops.
 on:
   schedule:
-    - cron: "*/10 * * * *"   # every 10 minutes (GitHub may delay a few minutes at busy times)
+    - cron: "*/30 * * * *"
   workflow_dispatch:
     inputs:
       mode:
-        description: "Manual test: leave empty for a normal run, or news / calendar / quiz / poll"
+        description: "Leave as 'loop' to run continuously, or test one thing: news / calendar / quiz / poll / promo-full / promo-value / promo-short"
         required: false
-        default: ""
+        default: "loop"
 
 concurrency:
-  group: telegram-bot
+  group: telegram-bot-${{ (github.event_name == 'schedule' || github.event.inputs.mode == 'loop' || github.event.inputs.mode == '') && 'loop' || 'manual' }}
   cancel-in-progress: false
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -32,10 +35,26 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: python bot.py ${{ github.event.inputs.mode }}
-      - name: Save state (so nothing is posted twice)
+          MODE: ${{ github.event_name == 'schedule' && 'loop' || github.event.inputs.mode || 'loop' }}
         run: |
           git config user.name "market-bot"
           git config user.email "market-bot@users.noreply.github.com"
-          git add state.json
-          git diff --cached --quiet || (git commit -m "bot state" -q && git push -q)
+          save_state() {
+            git add state.json
+            git diff --cached --quiet || { git commit -q -m "bot state" && { git push -q || { git pull -q --rebase -X ours && git push -q; }; }; }
+          }
+          if [ "$MODE" != "loop" ]; then
+            python bot.py "$MODE"; save_state; exit 0
+          fi
+          end=$(( $(date +%s) + 340*60 ))
+          while [ "$(date +%s)" -lt "$end" ]; do
+            git pull -q --rebase -X theirs || true
+            python bot.py || echo "run failed, continuing"
+            save_state || echo "state save failed, continuing"
+            sleep 600
+          done
+      - name: Start the next loop run
+        if: always() && (github.event_name == 'schedule' || github.event.inputs.mode == 'loop' || github.event.inputs.mode == '')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run bot.yml --ref main -f mode=loop -R ${{ github.repository }}
