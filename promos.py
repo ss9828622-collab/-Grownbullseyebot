@@ -11,16 +11,11 @@ SCHEDULE = [
     ("10:30", [1, 5], ["short"]),                  # Tue, Sat morning peak
 ]
 
-LINKS = """1️⃣ <b>ELEFIN</b>
+LINKS = """👉 <b>ELEFIN</b>
 https://partners.elefin.com/go/BQXB-B6LPZB
-Referral Code: <code>BQXB-B6LPZB</code>
+Referral Code: <code>BQXB-B6LPZB</code>"""
 
-2️⃣ <b>XM</b>
-https://affs.click/CcDFq
-Referral Code: <code>GW699</code>"""
-
-FOOTER = ("<i>Partner/affiliate links. Trading in forex, gold and CFDs carries high risk of loss; "
-          "deposit only what you can afford to lose. Education only, not investment advice.</i>")
+FOOTER = "<i>Partner link.</i>"
 
 TEXTS = {
     "full": f"""<b>OLD MONEY BULLSEYE CLUB</b> 🐎
@@ -30,10 +25,10 @@ TEXTS = {
 ✅ Access to our trading knowledge and community
 
 <b>HOW TO JOIN?</b>
-Simply open an account through any one of our partner options and deposit $200 or more.
+Simply open an account through our partner ELEFIN and deposit $200 or more.
 No additional membership fees. No extra charges.
 
-<b>CHOOSE YOUR ACCOUNT OPTION:</b>
+<b>OPEN YOUR ACCOUNT:</b>
 
 {LINKS}
 
@@ -45,7 +40,7 @@ No additional membership fees. No extra charges.
 
 OLD MONEY BULLSEYE CLUB mein har hafte market discussions aur educational sessions hote hain: Volume Profile, Order Flow, aur Gold/NQ/BTC ke key levels ka logic. Community ke saath seekho, akele nahi.
 
-<b>Join kaise karein:</b> neeche kisi ek partner ke through account kholo aur $200+ deposit karo. Koi alag membership fee nahi.
+<b>Join kaise karein:</b> neeche diye ELEFIN link se account kholo aur $200+ deposit karo. Koi alag membership fee nahi.
 
 {LINKS}
 
@@ -57,7 +52,6 @@ OLD MONEY BULLSEYE CLUB mein har hafte market discussions aur educational sessio
 
 Join: partner account kholo + $200 deposit. No membership fee.
 ELEFIN: https://partners.elefin.com/go/BQXB-B6LPZB (code <code>BQXB-B6LPZB</code>)
-XM: https://affs.click/CcDFq (code <code>GW699</code>)
 
 📩 DM @SHUBH_Bullseye
 
