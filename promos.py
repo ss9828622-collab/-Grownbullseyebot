@@ -3,7 +3,7 @@
 Edit the texts or schedule here. Versions rotate so members don't see the same post every time.
 """
 
-ENABLED = False   # set True to start posting
+ENABLED = True    # set False to stop promo posts
 
 # (time IST, weekdays: 0=Mon ... 6=Sun, which versions to rotate)
 SCHEDULE = [
