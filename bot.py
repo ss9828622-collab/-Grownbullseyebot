@@ -351,6 +351,27 @@ def main():
     now = dt.datetime.now(IST)
     if len(sys.argv) > 1:   # manual test: python bot.py news|calendar|quiz|poll
         cmd = sys.argv[1]
+        if cmd == "check":   # health check, posts nothing
+            for name, url in config.FEEDS.items():
+                try:
+                    log(f"feed OK  {name}: {len(fetch_feed(name, url))} items")
+                except Exception as e:
+                    log(f"feed BAD {name}: {e}")
+            try:
+                log(f"calendar OK: {len(load_calendar())} high-impact events this week")
+            except Exception as e:
+                log(f"calendar BAD: {e}")
+            try:
+                log(f"AI OK: {claude('Reply with JSON {\"ok\": true}')}")
+            except Exception as e:
+                log(f"AI BAD: {e}")
+            try:
+                r = json.loads(http(f"https://api.telegram.org/bot{os.environ['TELEGRAM_BOT_TOKEN']}/getChat?chat_id="
+                                    + urllib.parse.quote(os.environ['TELEGRAM_CHAT_ID'])))
+                log(f"Telegram OK: {r['result'].get('title')}")
+            except Exception as e:
+                log(f"Telegram BAD: {e}")
+            return
         if cmd == "news":
             run_news(state, now)
         elif cmd == "calendar":
