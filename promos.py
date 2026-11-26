@@ -5,6 +5,8 @@ Edit the texts or schedule here. Versions rotate so members don't see the same p
 
 ENABLED = True    # set False to stop promo posts
 
+START_DATE = "2026-11-27"   # scheduled promos run from this date (IST)
+
 # (time IST, weekdays: 0=Mon ... 6=Sun, which versions to rotate)
 SCHEDULE = [
     ("10:00", [0, 1, 2, 3, 4, 5, 6], ["short"]),           # every day, morning

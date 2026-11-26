@@ -364,7 +364,7 @@ def run_polls(state, now, today_events):
 
 # ---------------------------------------------------------------- promos
 def run_promos(state, now):
-    if not promos.ENABLED:
+    if not promos.ENABLED or now.date().isoformat() < getattr(promos, "START_DATE", ""):
         return
     for i, (slot, days, versions) in enumerate(promos.SCHEDULE):
         key = f"{now.date().isoformat()}:promo{i}"
