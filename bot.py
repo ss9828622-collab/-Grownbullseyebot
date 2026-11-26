@@ -186,6 +186,24 @@ def norm_key(title):
     return hashlib.md5(re.sub(r"[^a-z0-9]", "", t)[:80].encode()).hexdigest()
 
 
+# a price level like $3,500 / 3,500 / 24,000 / 95000 (data like "2.6%" or "$5B" is allowed)
+PRICE_RE = re.compile(r"\$\s?\d{1,3}(,\d{3})+|\b\d{1,3},\d{3}\b|\b(?!(19|20)\d\d\b)\d{4,6}(\.\d+)?\b(?!\s*(se|me|mein|tak)?\s*(%|percent))")
+
+
+def live_prices():
+    out = []
+    for name, sym in config.LIVE_SYMBOLS.items():
+        try:
+            d = json.loads(http(f"https://query1.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(sym)}?range=1d&interval=5m"))
+            m = d["chart"]["result"][0]["meta"]
+            px, prev = m["regularMarketPrice"], m.get("chartPreviousClose") or m.get("previousClose")
+            out.append(f"{name}: {px:,.2f} ({(px / prev - 1) * 100:+.2f}% today)")
+        except Exception as e:
+            out.append(f"{name}: unavailable")
+            log(f"price failed {sym}: {e}")
+    return "\n".join(out)
+
+
 def run_news(state, now):
     if config.QUIET_HOURS[0] <= now.hour or now.hour < config.QUIET_HOURS[1]:
         log("quiet hours, skip news")
@@ -193,6 +211,10 @@ def run_news(state, now):
     day = now.date().isoformat()
     if state["daily_count"].get(day, 0) >= config.MAX_NEWS_POSTS_PER_DAY:
         log("daily news cap reached")
+        return
+    last = state.get("last_news_ts", 0)
+    if time.time() - last < config.MIN_GAP_BETWEEN_NEWS_MIN * 60:
+        log("too soon after last news post, skip")
         return
     fresh_cut = dt.datetime.now(dt.timezone.utc) - dt.timedelta(minutes=config.NEWS_MAX_AGE_MIN)
     cands = []
@@ -207,7 +229,7 @@ def run_news(state, now):
             if k in state["seen"]:
                 continue
             state["seen"][k] = time.time()
-            if it["time"] and it["time"] < fresh_cut:
+            if not it["time"] or it["time"] < fresh_cut:
                 continue
             text = (it["title"] + " " + it["summary"]).lower()
             if any(w in text for w in config.KEYWORDS):
@@ -221,13 +243,23 @@ def run_news(state, now):
         for i, c in enumerate(cands))
     left = config.MAX_NEWS_POSTS_PER_DAY - state["daily_count"].get(day, 0)
     picks = claude(prompts.PICK_NEWS.format(
-        max_posts=min(config.MAX_NEWS_POSTS_PER_RUN, left),
+        max_posts=min(config.MAX_NEWS_POSTS_PER_RUN, left), prices=live_prices(),
         recent="\n".join(state["recent_posts"][-15:]) or "(none)",
         items=lines)) or []
     for p in picks[:config.MAX_NEWS_POSTS_PER_RUN]:
         try:
             src = cands[int(p["id"])]
         except (KeyError, ValueError, IndexError, TypeError):
+            continue
+        try:
+            if int(p.get("importance", 0)) < config.MIN_IMPORTANCE:
+                log("not important enough:", p.get("headline"))
+                continue
+        except (TypeError, ValueError):
+            continue
+        txt = f"{p.get('headline','')} {p.get('body','')} {p.get('trader_note','')}"
+        if PRICE_RE.search(txt):
+            log("dropped (contains a price level):", p.get("headline"))
             continue
         e = html.escape
         src_name = re.sub(r"^Google News: .*", "News", src["source"])
@@ -237,6 +269,7 @@ def run_news(state, now):
                 f"<i>Source: {source}</i>  #{e(p.get('tag', 'MACRO'))} {config.HASHTAG}")
         send_text(text)
         state["recent_posts"].append(p["headline"])
+        state["last_news_ts"] = time.time()
         state["daily_count"][day] = state["daily_count"].get(day, 0) + 1
         log("posted news:", p["headline"])
 
@@ -357,6 +390,7 @@ def main():
                     log(f"feed OK  {name}: {len(fetch_feed(name, url))} items")
                 except Exception as e:
                     log(f"feed BAD {name}: {e}")
+            log("prices: " + live_prices().replace("\n", " | "))
             try:
                 log(f"calendar OK: {len(load_calendar())} high-impact events this week")
             except Exception as e:

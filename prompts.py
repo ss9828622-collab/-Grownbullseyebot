@@ -17,33 +17,45 @@ Hard rules, never break them:
 
 PICK_NEWS = """Below are fresh headlines (id | source | time UTC | headline | summary).
 
-Pick at most {max_posts} stories that can genuinely MOVE Gold (XAUUSD), NQ (Nasdaq 100) or BTC TODAY:
-- Gold: Fed/rates, real yields, USD, central-bank gold buying, geopolitical shocks, big ETF flows.
-- NQ: Fed/rates, US data, mega-cap tech earnings or guidance (Nvidia, Apple, Microsoft, etc.), AI/chip
-  news, tariffs or export curbs on tech.
-- BTC: spot ETF flows, SEC/regulation, big exchange or hack news, large institutional buying/selling,
-  Fed liquidity, risk-on/risk-off moves.
-- Macro events that move all three (CPI, NFP, FOMC, PCE, yields spike, USD shock).
-Ignore everything else (single small-cap stocks, altcoin hype, forex-only or India-only stories).
-Skip opinion pieces, price-prediction articles, "gold/BTC could hit X" listicles, sponsored crypto posts, stale or duplicate stories,
-and anything already covered in RECENTLY POSTED. Picking zero is fine and often correct.
+LIVE PRICES right now (today's change vs previous close):
+{prices}
+
+Your job is to be a very strict editor. Members must only get news that truly matters.
+Pick at most {max_posts} story, and ONLY if it is a top-tier market mover for Gold (XAUUSD),
+NQ (Nasdaq 100) or BTC today, for example:
+- A major US data release just out (CPI, NFP, PCE, GDP) or an FOMC decision / Powell remarks.
+- A big surprise from the Fed, US Treasury, a major central bank, or a large geopolitical shock.
+- Mega-cap tech earnings/guidance that moves NQ (Nvidia, Apple, Microsoft...), big tariff/export news.
+- Major BTC events: SEC/regulation decisions, very large ETF flow records, major exchange hacks.
+Score each candidate "importance" 1-10 honestly. Routine market wraps, "gold rises/falls" price
+reports, analyst opinions, previews, predictions, small company news and repeats are 1-5.
+Picking zero is the normal result. Most checks should return [].
+
+ACCURACY RULES (very important, mistakes destroy trust):
+- REJECT any story whose described price move contradicts the LIVE PRICES (e.g. it says gold is falling
+  but live gold is up today): it is stale or wrong.
+- NEVER write price levels or % moves of Gold, NQ, Nasdaq, S&P or BTC in the post (no "$3,500",
+  no "gold down 1%", no "Nasdaq crashes 3%"). Talk about the news itself.
+- Only use numbers that are the news itself and appear in the source text: data releases (CPI 2.6%),
+  rate decisions, ETF flow totals. If unsure, leave the number out.
+- Never add facts that are not in the headline/summary.
+
+RECENTLY POSTED (do not repeat the same story or theme):
+{recent}
 
 For each pick write a Telegram post:
-- "headline": max 12 words, punchy, factual (English or Hinglish).
-- "body": 2-3 short lines in Hinglish: what happened, with the key number if the source gives one.
-- "trader_note": 1-2 lines in Hinglish: what it means for traders and what to watch
-  (e.g. volatility around the release, USD/yield link to Gold, check volume at key levels,
-  reduce size around the event). No direction as fact, no levels as advice.
-- "tag": one of GOLD, NQ, BTC, MACRO (MACRO when it hits all three). In "trader_note" say which of
-  Gold / NQ / BTC is affected and how they are linked (e.g. yields up = pressure on NQ and Gold).
-
-RECENTLY POSTED (do not repeat):
-{recent}
+- "importance": 1-10.
+- "headline": max 12 words, factual (English or Hinglish), no price levels.
+- "body": 2-3 short lines in Hinglish: what happened and why it matters.
+- "trader_note": 1-2 lines in Hinglish: which of Gold / NQ / BTC is affected, how they are linked
+  (e.g. yields up = pressure on NQ and Gold), and what to watch (volatility, volume at key areas,
+  smaller size around events). No direction as fact, no levels.
+- "tag": one of GOLD, NQ, BTC, MACRO.
 
 HEADLINES:
 {items}
 
-Reply with ONLY a JSON array, e.g. [{{"id": 3, "headline": "...", "body": "...", "trader_note": "...", "tag": "GOLD"}}] or [].
+Reply with ONLY a JSON array, e.g. [{{"id": 3, "importance": 9, "headline": "...", "body": "...", "trader_note": "...", "tag": "MACRO"}}] or [].
 """
 
 MORNING_BRIEF = """Write today's morning calendar post for the channel. Today (IST) is {date}.

@@ -36,9 +36,13 @@ GEMINI_MODELS = ["gemini-flash-lite-latest", "gemini-flash-latest", "gemini-2.5-
 MODEL = "claude-sonnet-5-5"
 
 # ---- Pacing (IST) ----
-NEWS_MAX_AGE_MIN = 90          # ignore stories older than this
-MAX_NEWS_POSTS_PER_RUN = 2     # Claude picks at most this many per run
-MAX_NEWS_POSTS_PER_DAY = 14
+NEWS_MAX_AGE_MIN = 60          # ignore stories older than this (and any story with no timestamp)
+MAX_NEWS_POSTS_PER_RUN = 1     # at most 1 story per check
+MAX_NEWS_POSTS_PER_DAY = 4     # only the most important news
+MIN_GAP_BETWEEN_NEWS_MIN = 120 # at least 2 hours between news posts
+MIN_IMPORTANCE = 8             # AI scores 1-10; only 8+ gets posted
+# Live prices given to the AI so it can reject stale/contradicting stories (Yahoo Finance, free)
+LIVE_SYMBOLS = {"Gold": "GC=F", "NQ (Nasdaq 100 fut)": "NQ=F", "BTC": "BTC-USD"}
 QUIET_HOURS = (23, 7)          # no news posts from 23:00 to 06:59 IST (calendar alerts still go)
 
 MORNING_BRIEF_AT = "09:30"     # daily "Aaj ka market calendar" post
