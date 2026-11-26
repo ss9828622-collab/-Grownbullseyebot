@@ -986,11 +986,14 @@
   "Macro data (jaise NFP ya CPI) forecast se better aaye, par price expected direction ke opposite move karke value area mein lot aaye. Iska matlab?",
   "Bitcoin perpetual futures mein funding rate positive hai aur price bhi upar ja raha hai, lekin volume drop ho raha hai. Iska kya matlab ho sakta hai?"
  ],
- "recent_polls": [],
+ "recent_polls": [
+  "Nasdaq me 3.3% crash aur Gold $3,500 ke niche. Aise high volatility din me aapka plan kya hai?"
+ ],
  "done": {
   "2026-11-25:poll0": true,
   "2026-11-26:brief": true,
-  "2026-11-26:poll0": true
+  "2026-11-26:poll0": true,
+  "2026-11-26:poll1": true
  },
  "alerted": [],
  "daily_count": {
