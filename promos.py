@@ -7,8 +7,8 @@ ENABLED = True    # set False to stop promo posts
 
 # (time IST, weekdays: 0=Mon ... 6=Sun, which versions to rotate)
 SCHEDULE = [
-    ("20:00", [0, 2, 4, 6], ["full", "value"]),   # Mon, Wed, Fri, Sun evening peak
-    ("10:30", [1, 5], ["short"]),                  # Tue, Sat morning peak
+    ("10:00", [0, 1, 2, 3, 4, 5, 6], ["short"]),           # every day, morning
+    ("20:00", [0, 1, 2, 3, 4, 5, 6], ["full", "value"]),   # every day, evening peak
 ]
 
 LINKS = """👉 <b>ELEFIN</b>
