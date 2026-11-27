@@ -1857,7 +1857,25 @@
   "9987c0d174f149747721c7566d9a4671": 1795756898.904461,
   "f7570a9b96f3df1ef0697e6604686074": 1795756898.9044695,
   "dcd90f3010ca468119705fd0ff68aa0b": 1795756898.9045103,
-  "203b4039b2075e4974f03e3ee997d242": 1795756898.9045665
+  "203b4039b2075e4974f03e3ee997d242": 1795756898.9045665,
+  "7831486c89ff9ce1514fe7510726caab": 1795757504.534361,
+  "e3544408f3bfb3d63f1b10a99423aefa": 1795757504.5344267,
+  "fc7d03303b0680e20e7b11cc52f6aca3": 1795757504.5344486,
+  "9295cd9607a4e8be645ec348eb6d3149": 1795757504.534476,
+  "ef8c6e6d713faec053c01bb9ee994b6a": 1795757504.5344834,
+  "263cfaa7f91b2757cd367f8654ed412c": 1795757504.5345237,
+  "a0e5fdf14869b1ec1dfcf2df93bc1b0d": 1795757504.534531,
+  "c0346388ced78b2654bd9dad0033a7a3": 1795757504.5346038,
+  "bf0ff75e4d8f88e83076cb21b8ae9c02": 1795757504.5346189,
+  "608c1a949dabee65a2897e2608408fd9": 1795757504.5346844,
+  "8526e5b42c4707b4f9568901e198265e": 1795757505.070836,
+  "88384cff42cbb69b25393950d40de4ea": 1795757505.411464,
+  "857fe18c33c5b6bb489cb4ddfeaea7e2": 1795757505.4114933,
+  "d9374c1efeb052bc028b4ce2ab9f6e3e": 1795757505.4115052,
+  "f00c47158743d2e3e499a83b35f13926": 1795757505.4115279,
+  "453343dc7637b4373a7f534208a3118a": 1795757505.411545,
+  "bb29fd716bff7793ffb83748eca5402f": 1795757505.4115915,
+  "c74dc6cfdfc18e34735db92058760f57": 1795757505.411601
  },
  "recent_posts": [
   "US Inflation Data Fuels Rate Hike Bets, Gold Dips Below $3,500",
@@ -1869,7 +1887,8 @@
  ],
  "recent_quiz": [
   "Macro data (jaise NFP ya CPI) forecast se better aaye, par price expected direction ke opposite move karke value area mein lot aaye. Iska matlab?",
-  "Bitcoin perpetual futures mein funding rate positive hai aur price bhi upar ja raha hai, lekin volume drop ho raha hai. Iska kya matlab ho sakta hai?"
+  "Bitcoin perpetual futures mein funding rate positive hai aur price bhi upar ja raha hai, lekin volume drop ho raha hai. Iska kya matlab ho sakta hai?",
+  "Gold (XAUUSD) mein US real yields badh rahe hain, par dollar (DXY) girne ke bawajood gold price mein strong buying dikh rahi hai. Iska kya possible matlab ho sakta hai?"
  ],
  "recent_polls": [
   "Nasdaq me 3.3% crash aur Gold $3,500 ke niche. Aise high volatility din me aapka plan kya hai?"
@@ -1880,7 +1899,8 @@
   "2026-11-26:poll0": true,
   "2026-11-26:poll1": true,
   "2026-11-27:brief": true,
-  "2026-11-27:promo0": true
+  "2026-11-27:promo0": true,
+  "2026-11-27:poll0": true
  },
  "alerted": [],
  "daily_count": {
