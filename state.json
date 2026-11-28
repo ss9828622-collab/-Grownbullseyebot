@@ -6180,9 +6180,6 @@
   "US dollar aur yields me surge ke baad, aaj ke session me aapka focus kis asset class par hai?"
  ],
  "done": {
-  "2026-11-26:brief": true,
-  "2026-11-26:poll0": true,
-  "2026-11-26:poll1": true,
   "2026-11-27:brief": true,
   "2026-11-27:promo0": true,
   "2026-11-27:poll0": true,
@@ -6195,9 +6192,7 @@
   "2026-11-28:promo1": true
  },
  "alerted": [],
- "daily_count": {
-  "2026-11-26": 6
- },
+ "daily_count": {},
  "promo_rot": {
   "0": 2,
   "1": 2
